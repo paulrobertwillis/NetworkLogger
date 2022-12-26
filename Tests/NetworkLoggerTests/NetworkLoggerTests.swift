@@ -487,7 +487,7 @@ class NetworkLoggerTests: XCTestCase {
     
     private func givenRequest(ofType type: String = "Unknown") {
         self.requestName = type
-        self.request = LoggableRequest(urlRequest: URLRequest(url: self.url!),
+        self.request = Request(urlRequest: URLRequest(url: self.url!),
                                       requestName: type)
     }
     
@@ -498,7 +498,7 @@ class NetworkLoggerTests: XCTestCase {
         urlRequest.addValue("Thu, 07 Jul 2022 15:51:16 GMT", forHTTPHeaderField: "Date")
         urlRequest.httpMethod = HTTPMethodType.get.rawValue
         
-        self.request = LoggableRequest(urlRequest: urlRequest,
+        self.request = Request(urlRequest: urlRequest,
                                       requestName: self.requestName!)
     }
     
@@ -509,7 +509,7 @@ class NetworkLoggerTests: XCTestCase {
         urlRequest.addValue("Thu, 07 Jul 2022 15:51:16 GMT", forHTTPHeaderField: "Date")
         urlRequest.httpMethod = HTTPMethodType.post.rawValue
         
-        self.request = LoggableRequest(urlRequest: urlRequest,
+        self.request = Request(urlRequest: urlRequest,
                                       requestName: self.requestName!)
     }
     
@@ -520,7 +520,7 @@ class NetworkLoggerTests: XCTestCase {
         urlRequest.addValue("Thu, 07 Jul 2022 15:51:16 GMT", forHTTPHeaderField: "Date")
         urlRequest.httpMethod = HTTPMethodType.delete.rawValue
         
-        self.request = LoggableRequest(urlRequest: urlRequest,
+        self.request = Request(urlRequest: urlRequest,
                                       requestName: self.requestName!)
     }
     
@@ -530,7 +530,7 @@ class NetworkLoggerTests: XCTestCase {
                                           httpVersion: "1.1",
                                           headerFields: ["Date": "Thu, 07 Jul 2022 15:51:17 GMT"]
         )!
-        self.response = LoggableResponse(urlResponse: urlResponse,
+        self.response = Response(urlResponse: urlResponse,
                                         requestName: type,
                                         data: data)
     }
@@ -541,7 +541,7 @@ class NetworkLoggerTests: XCTestCase {
                                           httpVersion: "1.1",
                                           headerFields: ["Date": "Thu, 07 Jul 2022 15:51:17 GMT"]
         )!
-        self.response = LoggableResponse(urlResponse: urlResponse,
+        self.response = Response(urlResponse: urlResponse,
                                         requestName: type)
         self.networkError = NetworkErrorMock.someError
     }
@@ -552,7 +552,7 @@ class NetworkLoggerTests: XCTestCase {
                                           httpVersion: "1.1",
                                           headerFields: [:]
         )!
-        self.response = LoggableResponse(urlResponse: urlResponse,
+        self.response = Response(urlResponse: urlResponse,
                                         requestName: type)
     }
     
@@ -711,4 +711,23 @@ func successResponseStub() -> Data {
           "total_pages": 261
         }
         """.data(using: .utf8)!
+}
+
+struct Request: LoggableRequest {
+    let urlRequest: URLRequest
+    let requestName: String
+}
+
+struct Response: LoggableResponse {
+    let urlResponse: HTTPURLResponse
+    let requestName: String
+    let data: Data?
+    
+    public init(urlResponse: HTTPURLResponse,
+         requestName: String,
+         data: Data? = nil) {
+        self.urlResponse = urlResponse
+        self.requestName = requestName
+        self.data = data
+    }
 }
