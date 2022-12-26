@@ -2,7 +2,7 @@ import Foundation
 
 // TODO: for prod/dev, can have different targets or a switch ...? By default, just use ifdebug.
 
-public protocol LogOutputProtocol {
+protocol LogOutputProtocol {
     func write(_ string: String)
 }
 

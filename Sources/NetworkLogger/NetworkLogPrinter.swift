@@ -1,6 +1,6 @@
 import Foundation
 
-public protocol NetworkLogPrinterProtocol {
+protocol NetworkLogPrinterProtocol {
     func writeLog(_ log: Log)
 }
 

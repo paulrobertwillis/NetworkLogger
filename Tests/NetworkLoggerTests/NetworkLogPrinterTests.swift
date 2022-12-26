@@ -552,7 +552,7 @@ class NetworkLogPrinterTests: XCTestCase {
     
     private func givenRequestLogCreated() {
         let log = Log(logType: .request,
-                      requestName: .getMovieGenres,
+                      requestName: "Get Movie Genres",
                       url: URL(string: "www.example.com")
         )
         self.requestLog = log
@@ -561,7 +561,7 @@ class NetworkLogPrinterTests: XCTestCase {
     
     private func givenRequestLogCreatedWithMethodTypeAndUrl() {
         let log = Log(logType: .request,
-                      requestName: .getMovieGenres,
+                      requestName: "Get Movie Genres",
                       httpMethodType: "GET",
                       url: URL(string: "www.example.com")
         )
@@ -571,7 +571,7 @@ class NetworkLogPrinterTests: XCTestCase {
     
     private func givenRequestLogCreatedWithNoUrl() {
         let log = Log(logType: .request,
-                      requestName: .getMovieGenres,
+                      requestName: "Get Movie Genres",
                       httpMethodType: "GET",
                       url: nil
         )
@@ -581,7 +581,7 @@ class NetworkLogPrinterTests: XCTestCase {
     
     private func givenRequestLogCreatedWithHeaders() {
         let log = Log(logType: .request,
-                      requestName: .getMovieGenres,
+                      requestName: "Get Movie Genres",
                       url: URL(string: "www.example.com"),
                       headers: [
                         "Date": "Thu, 07 Jul 2022 15:51:16 GMT",
@@ -597,7 +597,7 @@ class NetworkLogPrinterTests: XCTestCase {
 
     private func givenSuccessfulResponseLogCreated() {
         let log = Log(logType: .response,
-                      requestName: .getMovieGenres,
+                      requestName: "Get Movie Genres",
                       url: URL(string: "www.example.com"),
                       status: 200,
                       statusDescription: "OK",
@@ -614,7 +614,7 @@ class NetworkLogPrinterTests: XCTestCase {
     
     private func givenFailedResponseLogCreated() {
         let log = Log(logType: .response,
-                      requestName: .getMovieGenres,
+                      requestName: "Get Movie Genres",
                       url: URL(string: "www.example.com"),
                       status: 400,
                       statusDescription: "Bad Request",
@@ -630,7 +630,7 @@ class NetworkLogPrinterTests: XCTestCase {
     
     private func givenFailedResponseLogCreatedWithNoHeaders() {
         let log = Log(logType: .response,
-                      requestName: .getMovieGenres,
+                      requestName: "Get Movie Genres",
                       url: URL(string: "www.example.com"),
                       status: 400,
                       statusDescription: "Bad Request"

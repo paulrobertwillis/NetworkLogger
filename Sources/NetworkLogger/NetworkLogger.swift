@@ -1,13 +1,13 @@
 import Foundation
 
-protocol NetworkLoggerProtocol {
+public protocol NetworkLoggerProtocol {
     func log(_ request: LoggableRequest)
     func log(_ response: LoggableResponse)
     func log(_ response: LoggableResponse, withError error: Error?)
 }
 
 class NetworkLogger {
-        
+    
     // MARK: - Private Properties
     
     private let printer: NetworkLogPrinterProtocol
@@ -64,19 +64,10 @@ extension NetworkLogger: NetworkLoggerProtocol {
 }
 
 struct HTTPResponse {
-    public static let statusCodes: [Int: String] = [
+    static let statusCodes: [Int: String] = [
         200: "OK",
         400: "Bad Request"
     ]
-}
-
-public enum RequestName: String {
-    case unknown
-    case getMovieGenres
-    case getTopRatedMovies
-    case getPopularMovies
-    case postMovieRating
-    case deleteMovieRating
 }
 
 enum HTTPMethodType: String {

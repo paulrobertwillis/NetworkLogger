@@ -1,5 +1,5 @@
 import Foundation
-import NetworkLogger
+@testable import NetworkLogger
 
 class NetworkLogPrinterMock: NetworkLogPrinterProtocol {
     var printedLog: String = ""

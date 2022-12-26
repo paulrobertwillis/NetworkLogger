@@ -1,6 +1,6 @@
 import Foundation
 
-public struct Log: Equatable {
+struct Log: Equatable {
     enum LogType {
         case request
         case response
@@ -19,7 +19,7 @@ public struct Log: Equatable {
     
     init(
         logType: LogType,
-        requestName: RequestName,
+        requestName: String,
         httpMethodType: String? = nil,
         url: URL?,
         status: Int? = nil,
@@ -28,7 +28,7 @@ public struct Log: Equatable {
         errorDescription: String? = nil,
         body: String? = nil) {
             self.logType = logType
-            self.requestName = requestName.rawValue
+            self.requestName = requestName
             self.httpMethodType = httpMethodType
             self.url = url?.absoluteString
             self.status = status

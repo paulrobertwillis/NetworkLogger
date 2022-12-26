@@ -14,7 +14,7 @@ class NetworkLoggerTests: XCTestCase {
     
     private var url: URL?
     
-    private var requestName: RequestName?
+    private var requestName: String?
     private var request: LoggableRequest?
     private var response: LoggableResponse?
     
@@ -258,7 +258,7 @@ class NetworkLoggerTests: XCTestCase {
     
     func test_LogFormatting_whenLoggingRequest_logShouldContainNameOfNetworkRequestBeingPerformed() {
         // given
-        givenRequest(ofType: .getMovieGenres)
+        givenRequest(ofType: "Get Movie Genres")
         
         // when
         whenRequestIsLogged()
@@ -269,7 +269,7 @@ class NetworkLoggerTests: XCTestCase {
     
     func test_LogFormatting_whenLoggingMultipleRequests_logsShouldContainNamesOfAllNetworkRequestsBeingPerformed() {
         // given
-        givenRequest(ofType: .getPopularMovies)
+        givenRequest(ofType: "Get Popular Movies")
         
         // when
         whenRequestIsLogged()
@@ -278,7 +278,7 @@ class NetworkLoggerTests: XCTestCase {
         thenEnsureLogContainsNameOfNetworkRequestBeingPerformed()
         
         // given
-        givenRequest(ofType: .getTopRatedMovies)
+        givenRequest(ofType: "Get Top-Rated Movies")
         
         // when
         whenRequestIsLogged()
@@ -289,8 +289,8 @@ class NetworkLoggerTests: XCTestCase {
     
     func test_LogFormatting_whenLoggingSuccessfulResponse_logShouldContainNameOfRequestThatResultedInResponse() {
         // given
-        givenRequest(ofType: .getMovieGenres)
-        givenSuccessfulResponse(ofType: .getMovieGenres)
+        givenRequest(ofType: "Get Movie Genres")
+        givenSuccessfulResponse(ofType: "Get Movie Genres")
         
         // when
         whenResponseIsLogged()
@@ -301,8 +301,8 @@ class NetworkLoggerTests: XCTestCase {
     
     func test_LogFormatting_whenLoggingFailedResponse_logShouldContainNameOfRequestThatResultedInResponse() {
         // given
-        givenRequest(ofType: .getMovieGenres)
-        givenFailedResponse(ofType: .getMovieGenres)
+        givenRequest(ofType: "Get Movie Genres")
+        givenFailedResponse(ofType: "Get Movie Genres")
         
         // when
         whenResponseIsLogged()
@@ -485,74 +485,74 @@ class NetworkLoggerTests: XCTestCase {
     
     // MARK: - Given
     
-    private func givenRequest(ofType type: RequestName = .unknown) {
+    private func givenRequest(ofType type: String = "Unknown") {
         self.requestName = type
-        self.request = Request(urlRequest: URLRequest(url: self.url!),
+        self.request = LoggableRequest(urlRequest: URLRequest(url: self.url!),
                                       requestName: type)
     }
     
     private func givenGetRequest() {
-        self.requestName = .getMovieGenres
+        self.requestName = "Get Movie Genres"
         
         var urlRequest = URLRequest(url: self.url!)
         urlRequest.addValue("Thu, 07 Jul 2022 15:51:16 GMT", forHTTPHeaderField: "Date")
         urlRequest.httpMethod = HTTPMethodType.get.rawValue
         
-        self.request = Request(urlRequest: urlRequest,
+        self.request = LoggableRequest(urlRequest: urlRequest,
                                       requestName: self.requestName!)
     }
     
     private func givenPostRequest() {
-        self.requestName = .postMovieRating
+        self.requestName = "Post Movie Rating"
         
         var urlRequest = URLRequest(url: self.url!)
         urlRequest.addValue("Thu, 07 Jul 2022 15:51:16 GMT", forHTTPHeaderField: "Date")
         urlRequest.httpMethod = HTTPMethodType.post.rawValue
         
-        self.request = Request(urlRequest: urlRequest,
+        self.request = LoggableRequest(urlRequest: urlRequest,
                                       requestName: self.requestName!)
     }
     
     private func givenDeleteRequest() {
-        self.requestName = .deleteMovieRating
+        self.requestName = "Delete Movie Rating"
         
         var urlRequest = URLRequest(url: self.url!)
         urlRequest.addValue("Thu, 07 Jul 2022 15:51:16 GMT", forHTTPHeaderField: "Date")
         urlRequest.httpMethod = HTTPMethodType.delete.rawValue
         
-        self.request = Request(urlRequest: urlRequest,
+        self.request = LoggableRequest(urlRequest: urlRequest,
                                       requestName: self.requestName!)
     }
     
-    private func givenSuccessfulResponse(ofType type: RequestName = .unknown, withData data: Data? = nil) {
+    private func givenSuccessfulResponse(ofType type: String = "Unknown", withData data: Data? = nil) {
         let urlResponse = HTTPURLResponse(url: self.url!,
                                           statusCode: 200,
                                           httpVersion: "1.1",
                                           headerFields: ["Date": "Thu, 07 Jul 2022 15:51:17 GMT"]
         )!
-        self.response = Response(urlResponse: urlResponse,
+        self.response = LoggableResponse(urlResponse: urlResponse,
                                         requestName: type,
                                         data: data)
     }
     
-    private func givenFailedResponse(ofType type: RequestName = .unknown) {
+    private func givenFailedResponse(ofType type: String = "Unknown") {
         let urlResponse = HTTPURLResponse(url: self.url!,
                                           statusCode: 400,
                                           httpVersion: "1.1",
                                           headerFields: ["Date": "Thu, 07 Jul 2022 15:51:17 GMT"]
         )!
-        self.response = Response(urlResponse: urlResponse,
+        self.response = LoggableResponse(urlResponse: urlResponse,
                                         requestName: type)
         self.networkError = NetworkErrorMock.someError
     }
     
-    private func givenFailedResponseWithUnrecognisedStatusCode(requestType type: RequestName = .unknown) {
+    private func givenFailedResponseWithUnrecognisedStatusCode(requestType type: String = "Unknown") {
         let urlResponse = HTTPURLResponse(url: self.url!,
                                           statusCode: 9999,
                                           httpVersion: "1.1",
                                           headerFields: [:]
         )!
-        self.response = Response(urlResponse: urlResponse,
+        self.response = LoggableResponse(urlResponse: urlResponse,
                                         requestName: type)
     }
     
@@ -639,11 +639,11 @@ class NetworkLoggerTests: XCTestCase {
     }
     
     private func thenEnsureLogContainsNameOfNetworkRequestBeingPerformed() {
-        XCTAssertEqual(self.lastLogCreated()?.requestName, self.requestName?.rawValue)
+        XCTAssertEqual(self.lastLogCreated()?.requestName, self.requestName)
     }
     
     private func thenEnsureLogContainsNameOfRequestThatResultedInResponse() {
-        XCTAssertEqual(self.lastLogCreated()?.requestName, self.requestName?.rawValue)
+        XCTAssertEqual(self.lastLogCreated()?.requestName, self.requestName)
     }
     
     private func thenEnsureLogContainsGetHTTPMethodType() {
@@ -711,23 +711,4 @@ func successResponseStub() -> Data {
           "total_pages": 261
         }
         """.data(using: .utf8)!
-}
-
-struct Request: LoggableRequest {
-    public let urlRequest: URLRequest
-    public var requestName: RequestName
-}
-
-struct Response: LoggableResponse {
-    public let urlResponse: HTTPURLResponse
-    public var requestName: RequestName
-    public let data: Data?
-
-    init(urlResponse: HTTPURLResponse,
-         requestName: RequestName,
-         data: Data? = nil) {
-        self.urlResponse = urlResponse
-        self.requestName = requestName
-        self.data = data
-    }
 }
