@@ -18,7 +18,7 @@ public class NetworkLogger {
         self.printer = printer
     }
     
-    convenience init() {
+    public convenience init() {
         let consoleLogOutput = ConsoleLogOutput()
         let printer = NetworkLogPrinter(output: consoleLogOutput)
         self.init(printer: printer)
