@@ -6,7 +6,7 @@ public protocol NetworkLoggerProtocol {
     func log(_ response: LoggableResponse, withError error: Error?)
 }
 
-class NetworkLogger {
+public class NetworkLogger {
     
     // MARK: - Private Properties
     
@@ -17,12 +17,18 @@ class NetworkLogger {
     init(printer: NetworkLogPrinterProtocol) {
         self.printer = printer
     }
+    
+    convenience init() {
+        let consoleLogOutput = ConsoleLogOutput()
+        let printer = NetworkLogPrinter(output: consoleLogOutput)
+        self.init(printer: printer)
+    }
 }
 
 // MARK: - NetworkLoggerProtocol
 
 extension NetworkLogger: NetworkLoggerProtocol {
-    func log(_ request: LoggableRequest) {
+    public func log(_ request: LoggableRequest) {
         let log = Log(logType: .request,
                       requestName: request.requestName,
                       httpMethodType: request.urlRequest.httpMethod,
@@ -33,11 +39,11 @@ extension NetworkLogger: NetworkLoggerProtocol {
         self.printer.writeLog(log)
     }
     
-    func log(_ response: LoggableResponse) {
+    public func log(_ response: LoggableResponse) {
         self.log(response, withError: nil)
     }
     
-    func log(_ response: LoggableResponse, withError error: Error?) {
+    public func log(_ response: LoggableResponse, withError error: Error?) {
         let log = Log(logType: .response,
                       requestName: response.requestName,
                       url: response.urlResponse.url,
